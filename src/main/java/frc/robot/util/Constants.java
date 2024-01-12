@@ -17,10 +17,10 @@ public class Constants {
     public static final double radToDeg = 180 / Math.PI;
 
 
-    public static final double fLOffset = 44.3;
-    public static final double fROffset = 107.5;//removed 180 
-    public static final double bLOffset = 236.7; //may need to change which ones are rotated 180
-    public static final double bROffset = 48.4;
+    public static final double fLOffset = 45.35;//44.3;
+    public static final double fROffset = 286.52;//107.5;//removed 180 
+    public static final double bLOffset = 238.62;//236.7; //may need to change which ones are rotated 180
+    public static final double bROffset = 227.46;//48.4;
     public static final double DRIVE_TRAIN_WIDTH = 0.46355; // left to right size of drivetrain
     public static final double DRIVE_TRAIN_LENGTH = 0.46355; // front to back size of drivetrain
 

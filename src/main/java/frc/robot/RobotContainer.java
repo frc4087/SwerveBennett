@@ -38,7 +38,13 @@ public class RobotContainer {
   }
 
   public double getDriveJoyXR(){
-    double raw = getDriveJoy(4);
+    double raw = getDriveJoy(5);
+    return raw; 
+  }
+
+
+  public double getDriveJoyXL(){
+    double raw = getDriveJoy(0); //Verify axis
     return raw; 
   }
 
@@ -51,6 +57,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
+    
   }
 
   
@@ -62,29 +69,18 @@ double R = Math.sqrt(.5);
     double turnRate = SmartDashboard.getNumber("TurnRate", 0.1)* MAX_RATE/R;
    
 
-    SmartDashboard.putNumber("driveJoyXR", getDriveJoyXR());
-    SmartDashboard.putNumber("drivejoyYL",getDriveJoyYL());
+    //SmartDashboard.putNumber("driveJoyXR", getDriveJoyXR());
+    SmartDashboard.putNumber("drivejoyYL", getDriveJoyYL());
 
-    double deadzone = 0.05;
+    double xval = -getDriveJoyYL()*speedRate; // TODO: CHECK AXIS
+    double yval = -getDriveJoyXL()*speedRate;
+    double spinval = getDriveJoyXR() * turnRate;
 
-    double xval = Math.max(Math.min(0.0*speedRate, 1), -1);
-    double yval = Math.max(Math.min(1.0*speedRate, 1), -1);
-    double spinval = Math.max(Math.min(1.0*turnRate, 1), -1);
-
-    if (Math.abs(xval) < deadzone) {
-      xval = 0;
-    }
-    if (Math.abs(yval) < deadzone) {
-      yval = 0;
-    }
-    if (Math.abs(spinval) < deadzone) {
-      spinval = 0;
-    } 
+   
 
     swerveDrive.drive(new ChassisSpeeds(xval, yval, spinval));
-    // swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xval, yval, spinval, Rotation2d.fromDegrees(0)));
+    //swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xval, yval, spinval, Rotation2d.fromDegrees(0)));
     
-
   }
 
   /**

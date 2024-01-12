@@ -19,7 +19,7 @@ public class MathUtil {
         return ret;
     }
 
-    public static double mod(double a, double b) { //Returns a positive mod of a values in [-b, b]
+    public static double mod(double a, double b) { //Returns a positive mod of a values in [-b, b] 
         return ((a % b) + b) % b;
     }
     
