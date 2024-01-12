@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 //import edu.wpi.first.math.MathUtil;
@@ -28,6 +27,7 @@ import frc.robot.Pigeon2Handler;
 import frc.robot.util.Constants;
 
 // import java.util.Map;
+//test
 
 public class SwerveDriveSubsystem extends SubsystemBase {
 
@@ -63,13 +63,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         SendableRegistry.addLW(this, "Swerve Drive Subsystem");
 
-        angleController = new PIDController(.3, 0, 0);
-        angleController.enableContinuousInput(0, Math.PI * 2);
-        angleController.setSetpoint(0);
+        // angleController = new PIDController(.3, 0, 0); //this pid controller is for controlling total robot angle
+        //angleController.enableContinuousInput(0, Math.PI * 2); 
+        //angleController.setSetpoint(0); 
         
         Translation2d backRightLocation = new Translation2d(-L, -W);
         Translation2d backLeftLocation = new Translation2d(-L, W);
-        Translation2d frontRightLocation = new Translation2d(L, -W);
+        Translation2d frontRightLocation = new Translation2d(L, -W); 
         Translation2d frontLeftLocation = new Translation2d(L, W);
 
         kinematics = new SwerveDriveKinematics(backRightLocation, backLeftLocation, frontRightLocation, frontLeftLocation);
@@ -85,6 +85,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         //                 backLeft.getSwerveModulePosition(),
         //                 frontRight.getSwerveModulePosition(),
         //                 frontLeft.getSwerveModulePosition()});
+
+        
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -94,7 +96,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public void setSwerveModuleStates(SwerveModuleState[] states)
     {
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, 5);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, 5); 
         //SwerveDriveKinematics.desaturateWheelSpeeds(states, speeds, 5, Constants.kMaxVelocity, Constants.kMaxAngularVelocity);
         // Front left module state
         SwerveModuleState backRightState = states[0];
@@ -107,7 +109,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         // Back right module state
         SwerveModuleState frontLeftState = states[3];
-
+        
         backLeft.drive(backLeftState.speedMetersPerSecond, backLeftState.angle.getDegrees()); //5.5 m/s is maximum zero load velocity
         backRight.drive(backRightState.speedMetersPerSecond, backRightState.angle.getDegrees()); // removed negative sign
         frontLeft.drive(frontLeftState.speedMetersPerSecond, frontLeftState.angle.getDegrees());

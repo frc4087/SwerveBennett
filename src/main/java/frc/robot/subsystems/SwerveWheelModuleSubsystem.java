@@ -22,9 +22,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class SwerveWheelModuleSubsystem extends SubsystemBase {
-  double P = .005;
-  double I = 0.0;
-  double D = 0.0005;
+  double P = -0.00675;//0.000072;//0.000081;
+  double I = 0.00001;//0.000007;
+  double D = 0;//0.0000065;
   //hard code in the actual values once we find them off of smartdashboard
 
   private CANSparkMax angleMotor;
@@ -41,13 +41,14 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
       // We're using TalonFX motors on CAN.
       this.angleMotor = new CANSparkMax(angleMotorChannel,  MotorType.kBrushless);
       this.speedMotor = new CANSparkMax(speedMotorChannel,  MotorType.kBrushless);
-      this.angleEncoder = new CANCoder(angleEncoderChannel); // CANCoder Encoder
+      this.angleEncoder = new CANCoder(angleEncoderChannel); // CANCoder Encoder //TODO: CHECK THIS RANGE IS 0-360
       this.speedMotor.setIdleMode(IdleMode.kCoast);
       this.motorName = motorName;
       this.pidController = new PIDController(P, I, D); // This is the PID constant,
       // we're not using any
       // Integral/Derivative control but increasing the P value will make
       // the motors more aggressive to changing to angles.
+      
       
 
       //angleEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
@@ -81,41 +82,46 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
       setAngle(angle , currentEncoderValue);
       setSpeed(speed);
       
-      SmartDashboard.putNumber("Encoder " + motorName, getPosition());
       // SmartDashboard.putNumber("Distance " + motorName, getDistance());
       SmartDashboard.putNumber("Rotation " + motorName, getPositionRad());
+  }
+
+  public void setReverse(double speed){
+    setSpeed(-speed);
   }
 
   public void setAngle(double angle, double currentEncoderValue)
   {
       SmartDashboard.putNumber("Difference " + motorName, MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360));
-      angle = MathUtil.mod(angle, 360); // ensure setpoint is on scale 0-360
-      // int reverse = 1;
-      // //angle += 90;
+      angle = MathUtil.mod(angle, 360);
+      angle += 90;
 
-      // if (MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360) > 70)
-      // {
-      //     reverse = -1;
-      //     angle += 180;
-      // }
+      if (MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360) > 70)
+      {
+          //reverse = -1;
+          
+          angle += 180;
+      }
       
       double pidOut = -pidController.calculate(currentEncoderValue, angle);
+    
       
       angleMotor.set(pidOut);
       SmartDashboard.putNumber("PID Out " + motorName, pidOut);
 
-      // return reverse;
+      //What is reverse for?? It's not being used?? Does it reverse the modules or the wheel direction??
+     // return reverse;
   }
 
   public void setSpeed(double speed)
   {
-      speedMotor.set(speed); // sets motor speed //22150 units/100 ms at 12.4V
+      speedMotor.set(speed/5.5);
   }
 
   // this method outputs position of the encoder to the smartDashBoard, useful for
   // calibrating the encoder offsets
   public double getPosition() {
-      return MathUtil.mod(angleEncoder.getAbsolutePosition() - encoderOffset, 360);
+      return MathUtil.mod(angleEncoder.getAbsolutePosition() - encoderOffset, 360); 
   }
 
   public double getPositionRad() {
@@ -141,7 +147,9 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
       I = SmartDashboard.getNumber("I", I);
       D = SmartDashboard.getNumber("D", D);
       pidController.setPID(P, I, D);
-      
+    
+      SmartDashboard.putNumber("Encoder " + motorName, getPosition());
+
   }
 
   public void coast(){
@@ -152,14 +160,14 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
       speedMotor.setIdleMode(IdleMode.kBrake);
   }
 
-  // public void resetSensor()
-  // {
-  //     speedMotor.setSelectedSensorPosition(0);
-  // }
+//   public void resetSensor()
+//   {
+//       speedMotor.getSelectedSensorPosition(0);
+//   }
 
-  // 
-  // public SwerveModulePosition getSwerveModulePosition()
-  // {
-  //     return new SwerveModulePosition(getDistance(), new Rotation2d(getPositionRad()));
-  // }
+  
+//   public SwerveModulePosition getSwerveModulePosition()
+//   {
+//       return new SwerveModulePosition(getDistance(), new Rotation2d(getPositionRad()));
+//   }
 }
