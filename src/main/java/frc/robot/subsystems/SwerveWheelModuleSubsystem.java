@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.MathUtil;
+import frc.robot.RobotContainer;
 import frc.robot.util.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -98,9 +99,8 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
 
       if (MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360) > 70)
       {
-          //reverse = -1;
-          
           angle += 180;
+      
       }
       
       double pidOut = -pidController.calculate(currentEncoderValue, angle);
