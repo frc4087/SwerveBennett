@@ -34,15 +34,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public final double W = Constants.DRIVE_TRAIN_WIDTH / 2;
     public final double L = Constants.DRIVE_TRAIN_LENGTH / 2;
 
-    private SwerveWheelModuleSubsystem backRight;
-    private SwerveWheelModuleSubsystem backLeft;
-    private SwerveWheelModuleSubsystem frontRight;
-    private SwerveWheelModuleSubsystem frontLeft;
-    private SwerveDriveKinematics kinematics;
-    private ChassisSpeeds speeds;
-    private PIDController angleController;
-    private Pigeon2Handler pigeon;
-    private SwerveDriveOdometry odometry;
+    public SwerveWheelModuleSubsystem backRight;
+    public SwerveWheelModuleSubsystem backLeft;
+    public SwerveWheelModuleSubsystem frontRight;
+    public SwerveWheelModuleSubsystem frontLeft;
+    public SwerveDriveKinematics kinematics;
+    public static ChassisSpeeds speeds;
+    public PIDController angleController;
+    public Pigeon2Handler pigeon;
+    public SwerveDriveOdometry odometry;
     
     public SwerveDriveSubsystem(Pigeon2Handler pigeon) {
         //calibrateWidget = Shuffleboard.getTab("Preferences").addPersistent("Calibrate?", false)
@@ -88,7 +88,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         
     }
-
+    //This drive sets new speeds from the controller
+    //This class will periodically calculate new SwerveDriveModule positions based on these ChassisSpeeds
+    //Then, each module will be called to "drive" to these positions
     public void drive(ChassisSpeeds chassisSpeeds) {
         // implementation from Pride of the North
         speeds = chassisSpeeds;

@@ -90,29 +90,35 @@ public class SwerveWheelModuleSubsystem extends SubsystemBase {
       angleMotor.set(pidOut);
       SmartDashboard.putNumber("PID Out " + motorName, pidOut);
 
-      //What is reverse for?? It's not being used?? Does it reverse the modules or the wheel direction??
-     // return reverse;
+      
   }
 
   public void setSpeed(double speed)
   {
       speedMotor.set(speed/5.5);
   }
+
+  
   public void drive(double speed, double angle) {
       double currentEncoderValue = getPosition();
-      setAngle(angle , currentEncoderValue);
-      setSpeed(speed);
       
       // SmartDashboard.putNumber("Distance " + motorName, getDistance());
       SmartDashboard.putNumber("Rotation " + motorName, getPositionRad());
+      SmartDashboard.putNumber("angle reading", angle);
+      SmartDashboard.putNumber("Cyclical Distance", MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360));
+   
 
-      if (MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360) > 90)
-      {
-         angle += 180;
-          setSpeed(-speed);
-      
+      if(MathUtil.getCyclicalDistance(currentEncoderValue, angle, 360) > 90){
+        setSpeed(-speed);
+        setAngle(angle+180, currentEncoderValue);
+      }else{
+        setSpeed(speed);
+        setAngle(angle, currentEncoderValue);
       }
+    
   }
+
+
 
 
  

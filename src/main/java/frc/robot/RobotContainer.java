@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -78,8 +81,10 @@ double R = Math.sqrt(.5);
 
    
 
-    swerveDrive.drive(new ChassisSpeeds(xval, yval, spinval));
-    //swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xval, yval, spinval, Rotation2d.fromDegrees(0)));
+    // swerveDrive.drive(new ChassisSpeeds(xval, yval, spinval));
+    swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xval, yval, spinval, pigeon.getAngleDeg()));
+
+    new JoystickButton(driveJoy, 1).onTrue(new InstantCommand(()->pigeon.zeroYaw()));
     
   }
 
